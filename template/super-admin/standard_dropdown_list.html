@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for std in standard %}
+<option value="{{std.pk}}">{{ std.standard_name }}</option>
+{% endfor %}

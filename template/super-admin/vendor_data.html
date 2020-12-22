@@ -1,0 +1,208 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% load static %}
+
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row">
+        <div class="col">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="nav-wrapper">
+                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" href="{% url 'atl_person_details' pk %}" aria-selected="true">
+                            <i class="ni ni-cloud-upload-96 mr-2"></i>School ATL Incharge</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-2-tab" href="{% url 'vendor_data' pk %}" aria-selected="true">
+                            <i class="ni ni-cloud-upload-96 mr-2"></i>Vendor Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" href="{% url 'lab_reg_data' pk %}" aria-selected="true">
+                            <i class="ni ni-cloud-upload-96 mr-2"></i>Lab Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" href="{% url 'mentor_data' pk %}" aria-selected="true">
+                            <i class="ni ni-cloud-upload-96 mr-2"></i>Mentor Of Change</a>
+                    </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-xl-12">
+    <div class="card mt-n5">
+      <div class="p-4 bg-secondary">
+        <form method="post" class="needs-validation" id="schooleditform" data-city-url="{% url 'ajax_load_city' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            {{ form.gem_order_number|as_crispy_field }}
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form.purchase_order_no|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <div class="row">-->
+<!--                    <div class="col">-->
+<!--                        <span>Enrollment for which package</span>-->
+<!--                        <div class="table-responsive">-->
+<!--                            <table class="table align-items-center table-flush">-->
+<!--                                <tbody>-->
+<!--                                    <tr>-->
+<!--                                        {% for p in package %}-->
+<!--                                            <td><input type="checkbox" class="mb-0 form-check-input" value={{p}} name="package">-->
+<!--                                                <label class="form-check-label">{{ p }}</label></td>-->
+<!--                                        {% endfor %}-->
+<!--                                    </tr>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <h3>Company Details</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            {{ form.company_name|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ form.company_inc_id|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{ form.address|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ form.phone|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h3>Person Incharge Details</h3>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            {{ form.person_name|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ form.person_phone|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ form.person_email|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#Modal">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade bd-example-modal-lg" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ModalLabel">Confirmation</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="form-group">
+                                        <div class="table-responsive">
+                                            <table class="table align-items-center table-flush">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th scope="col">Ordered Through GEM?</th>
+                                                        <th scope="col">GEM Order Number</th>
+                                                        <th scope="col">Purchase Order Number</th>
+                                                        <th scope="col">Package Enrolled</th>
+                                                        <th scope="col">Company Name</th>
+                                                        <th scope="col">Company Incorporation ID</th>
+                                                        <th scope="col">Address</th>
+                                                        <th scope="col">Contact Number</th>
+                                                        <th scope="col">Email ID</th>
+                                                        <th scope="col">Person Name</th>
+                                                        <th scope="col">Person Number</th>
+                                                        <th scope="col">Person Email</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td id="gem_order"></td>
+                                                        <td id="gem_order_number"></td>
+                                                        <td id="purchase_order_no"></td>
+                                                        <td id="package"></td>
+                                                        <td id="company_name"></td>
+                                                        <td id="company_inc_id"></td>
+                                                        <td id="address"></td>
+                                                        <td id="phone"></td>
+                                                        <td id="email"></td>
+                                                        <td id="person_name"></td>
+                                                        <td id="person_phone"></td>
+                                                        <td id="person_email"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" name="add_school_details" class="btn btn-primary my-4">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            {% if 'data_add_success' in message.tags %}
+                                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                            {% endif %}
+                            {% if 'incorrect_format' in message.tags %}
+                                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+{% endblock %}

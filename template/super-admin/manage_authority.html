@@ -1,0 +1,263 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div id="id01">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Register New Authority</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form class="needs-validation" id="Tform" method="post"
+                           data-school-url="{% url 'ajax_load_school' %}" data-subject-url="{% url 'ajax_load_subject' %}"
+                           data-city-url="{% url 'ajax_load_city' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                {{ form.employee_name|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.designation|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.authority_type|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.address|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.state|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.city|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                            </div>
+                        </div>
+                            <div class="col text-right">
+                                <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#authModal">Submit</button>
+                            </div>
+                        </div>
+                        <div class="modal fade bd-example-modal-lg" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="authModalLabel">Confirmation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div class="form-group">
+                                                <div class="table-responsive">
+                                                    <table class="table align-items-center table-flush">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col">Name</th>
+                                                                <th scope="col">Designation</th>
+                                                                <th scope="col">Authority Type</th>
+                                                                <th scope="col">Email</th>
+                                                                <th scope="col">Phone</th>
+                                                                <th scope="col">Address</th>
+                                                                <th scope="col">State</th>
+                                                                <th scope="col">City</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="authority_name"></td>
+                                                                <td id="designation"></td>
+                                                                <td id="authority_type"></td>
+                                                                <td id="email"></td>
+                                                                <td id="phone"></td>
+                                                                <td id="address"></td>
+                                                                <td id="state"></td>
+                                                                <td id="city"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" name="add_authority" class="btn btn-primary my-4">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Authority Profiles</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Password</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for au in authority %}
+                        <tr>
+                            <th scope="row">
+                                <form action="{% url 'delete_authority' pk=au.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#confModal">Delete</button>
+                                    <button type="button" class="btn btn-secondary btn-sm">View</button>
+                                    <div class="modal fade bd-example-modal-lg" id="confModal" tabindex="-1" role="dialog" aria-labelledby="confModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confModalLabel">Confirmation</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete the Authority account?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                    <input class="btn btn-secondary" type="submit" value="Delete"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form></th>
+                            <td>{{au.auhtority_name|title}}</td>
+                            <td>{{au.email}}</td>
+                            <td>{{au.phone}}</td>
+                            <td>{{au.user.username}}</td>
+                            <td>{{au.password}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  var modal = document.getElementById('id01');
+  var error = "{{error}}";
+
+  if (error){
+    document.getElementById('id01').style.display='block';
+    $('#hint_id_password1').hide();
+
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        //document.getElementById('table').style.display ='block';
+    }
+  }
+
+  function checkData() {
+    $("#authority_name").html($("#id_authority_name").val());
+    $("#email").html($("#id_email").val());
+    $("#phone").html($("#id_phone").val());
+    $("#address").html($("#id_address").val());
+    $("#state").html($("#id_state option:selected").text());
+    $("#city").html($("#id_city option:selected").text());
+    $("#designation").html($("#id_designation").val());
+    $("#authority_type").html($("#id_authority_type option:selected").text());
+
+    };
+
+  $("#id_state").change(function () {
+      var url = $("#Tform").attr("data-city-url");  // get the url of the `load_cities` view
+      stateId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'state': stateId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+  $("#id_city").change(function () {
+      var url = $("#Tform").attr("data-school-url");  // get the url of the `load_cities` view
+      cityId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'city': cityId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_school").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+  $("#id_school").change(function () {
+    var url = $("#Tform").attr("data-subject-url");
+    schoolId = $(this).val();
+
+    $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'school': schoolId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_subject").html(data);  // replace the contents of the city input with the data that came from the server
+            }
+      });
+
+  });
+
+
+</script>
+{% endblock %}
+

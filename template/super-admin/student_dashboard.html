@@ -1,0 +1,469 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% load static %}
+
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Total Assessments Given</h5>
+
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                        <i class="ni ni-active-40"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Passed</h5>
+
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                        <i class="ni ni-chart-pie-35"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Failed</h5>
+
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                        <i class="ni ni-money-coins"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Total Questions</h5>
+
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                        <i class="ni ni-money-coins"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="col-xl-12">
+    <div class="card mt-n5">
+      <div class="p-4 bg-secondary">
+        <form  method="post" class="needs-validation" id="schooleditform" data-city-url="{% url 'ajax_load_city' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        {{ form.student_name|as_crispy_field }}
+                    </div>
+                    <div class="col">
+                        {{ form.email|as_crispy_field }}
+                    </div>
+                    <div class="col">
+                        {{ form.phone|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form.address|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form.state|as_crispy_field }}
+                    </div>
+                    <div class="col">
+                        {{ form.city|as_crispy_field }}
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form.school|as_crispy_field }}
+                    </div>
+                    <div class="col">
+                        {{ form.standard|as_crispy_field }}
+                    </div>
+                    <div class="col">
+                        {{ form.enrollment_no|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form.teacher_assigned|as_crispy_field }}
+                    </div>
+                </div>
+                <div>
+                    <div class="col text-right">
+                        <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#schoolEditModal">Edit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade bd-example-modal-lg" id="schoolEditModal" tabindex="-1" role="dialog" aria-labelledby="schoolEditModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="schoolEditModalLabel">Confirmation</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="form-group">
+                                    <div class="table-responsive">
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col">Student Name</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Phone</th>
+                                                    <th scope="col">Address</th>
+                                                    <th scope="col">State</th>
+                                                    <th scope="col">City</th>
+                                                    <th scope="col">School Board</th>
+                                                    <th scope="col">Principal</th>
+                                                    <th scope="col">Principal's Email</th>
+                                                    <th scope="col">ATL Authorised</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td id="school_name"></td>
+                                                    <td id="email"></td>
+                                                    <td id="phone"></td>
+                                                    <td id="address"></td>
+                                                    <td id="state"></td>
+                                                    <td id="city"></td>
+                                                    <td id="school_board"></td>
+                                                    <td id="incharge_name"></td>
+                                                    <td id="incharge_email"></td>
+                                                    <td id="atl"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" name="edit_school" class="btn btn-primary my-4">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="card bg-primary pt-4">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-3 col-md-6">
+          <div class="card card-stats">
+                <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Quarter 1</h5>
+                  <h6></h6>
+                  <button type="button" class="btn btn-primary btn-sm">Info</button>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                    <i class="ni ni-money-coins"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Quarter 2</h5>
+                  <h6></h6>
+                  <button type="button" class="btn btn-primary btn-sm">Info</button>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                    <i class="ni ni-money-coins"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Quarter 3</h5>
+                  <h6></h6>
+                  <button type="button" class="btn btn-primary btn-sm">Info</button>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                    <i class="ni ni-money-coins"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Quarter 4</h5>
+                  <h6></h6>
+                  <button type="button" class="btn btn-primary btn-sm">Info</button>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                    <i class="ni ni-money-coins"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- Page content -->
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+
+                  <h5 class="h3 text-white mb-0">Performance</h5>
+                </div>
+                <div class="col">
+                  <ul class="nav nav-pills justify-content-end">
+                    <li class="nav-item mr-2 mr-md-0">
+                      <a href="#" id="school_chart" class="nav-link py-2 px-3 active" data-toggle="tab">
+                        <span class="d-none d-md-block">P1</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" id="student_chart" class="nav-link py-2 px-3" data-toggle="tab">
+                        <span class="d-none d-md-block">P2</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" id="student_chart" class="nav-link py-2 px-3" data-toggle="tab">
+                        <span class="d-none d-md-block">P3</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" id="student_chart" class="nav-link py-2 px-3" data-toggle="tab">
+                        <span class="d-none d-md-block">P4</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div id="graph-container" class="chart">
+                <!-- Chart wrapper -->
+                <canvas id="chart-sales_dark" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--</div>-->
+<script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/js-cookie/js.cookie.js' %}"></script>
+<script src="{% static 'vendor/jquery.scrollbar/jquery.scrollbar.min.js' %}"></script>
+<script src="{% static 'vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js' %}"></script>
+<!-- Optional JS -->
+<script src="{% static 'vendor/chart.js/dist/Chart.min.js' %}"></script>
+<script src="{% static 'vendor/chart.js/dist/Chart.extension.js' %}"></script>
+<script src="{% static 'vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<!-- Argon JS -->
+<script src="{% static 'js/argon.js' %}"></script>
+<script>
+var colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
+var d = new Date();
+var n = d.getMonth();
+
+$("#id_atl").prop('disabled', true);
+
+function checkData() {
+    $("#school_name").html($("#id_school_name").val());
+    $("#email").html($("#id_email").val());
+    $("#phone").html($("#id_phone").val());
+    $("#address").html($("#id_address").val());
+    $("#state").html($("#id_state option:selected").text());
+    $("#city").html($("#id_city option:selected").text());
+    $("#school_board").html($("#id_school_board option:selected").text());
+    $("#incharge_name").html($("#id_incharge_name").val());
+    $("#incharge_email").html($("#id_incharge_email").val());
+    $("#atl").html($("#id_atl").prop('checked'));
+
+    };
+
+$("#id_package").change(function () {
+    var url = $("#studentform").attr("data-topic-url");  // get the url of the `load_cities` view
+    var packageId = $(this).val();  // get the selected country ID from the HTML input
+
+    $.ajax({                       // initialize an AJAX request
+    url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+    data: {
+      'package': packageId,      // add the country id to the GET parameters
+      'affiliation': affiliationId
+    },
+    success: function (data) {   // `data` is the return of the `load_cities` view function
+      $("#id_sub_name").html(data);  // replace the contents of the city input with the data that came from the server
+    }
+    });
+
+    });
+  $("#id_state").change(function () {
+      var url = $("#schooleditform").attr("data-city-url");  // get the url of the `load_cities` view
+      stateId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'state': stateId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+<!--$(function() {-->
+<!--var data_value_sch = {{ data.scjoin }}-->
+<!--var labels = ["6th", "7th", "8th", "9th", "10th", "11th", "12th"]-->
+
+<!--render_chart(data_value_sch, labels, "chart-sales_dark", 'line', 'pink', colors[0] );-->
+
+<!--$("#chart-bars").remove();-->
+<!--$("#bars-chart").append('<canvas id="chart-bars" class="chart-canvas"></canvas>');-->
+<!--render_chart(data_value_tf, labels_bar, "chart-bars", "bar" );-->
+
+<!--});-->
+
+<!--$("#school_chart").click(function() {-->
+<!--  $('#chart-sales_dark').remove(); // this is my <canvas> element-->
+<!--  $('#graph-container').append('<canvas id="chart-sales_dark" class="chart-canvas"></canvas>');-->
+<!--  var data_value_sch = {{ data.scjoin }};-->
+<!--  var labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]-->
+
+<!--  render_chart(data_value_sch, labels, "chart-sales_dark", 'line', 'pink', colors[0]);-->
+<!--});-->
+
+<!--$("#student_chart").click(function() {-->
+<!--  $('#chart-sales_dark').remove(); // this is my <canvas> element-->
+<!--  $('#graph-container').append('<canvas id="chart-sales_dark" class="chart-canvas"></canvas>');-->
+<!--  var data_value_stu = {{ data.stjoin }};-->
+<!--  var labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]-->
+
+<!--  render_chart(data_value_stu, labels, "chart-sales_dark", 'line', 'pink', colors[0]);-->
+<!--});-->
+
+<!--function render_chart(data, labels, id, type, col1, col2, ) {-->
+<!--    var ctx = document.getElementById(id).getContext('2d');-->
+<!--    var myChart = new Chart(ctx, {-->
+<!--        type: type,-->
+<!--        data: {-->
+<!--            labels: labels,-->
+<!--            datasets: [{-->
+<!--                label: 'Count',-->
+<!--                data: data,-->
+<!--                backgroundColor: col1,-->
+<!--                borderColor: col2,-->
+<!--                borderWidth: 4,-->
+<!--                pointBackgroundColor: col2-->
+<!--            }]-->
+<!--        },-->
+<!--        options: {-->
+<!--          elements:{-->
+<!--                point:{-->
+<!--                    radius: 2-->
+<!--                }-->
+<!--            },-->
+<!--            scales: {-->
+<!--              yAxes: [{-->
+<!--                display: true,-->
+<!--                gridLines: {-->
+<!--                  display: true,-->
+<!--                  drawTicks: true,-->
+<!--                  lineWidth: 2,-->
+<!--                  color: colors[0],-->
+<!--                  zeroLineColor: colors[0]-->
+<!--                },-->
+<!--                ticks: {-->
+<!--                  display: true,-->
+<!--                  beginAtZero: false-->
+<!--                }-->
+<!--              }],-->
+<!--              xAxes: [{-->
+<!--                display: true,-->
+<!--              }]-->
+<!--            },-->
+<!--          }-->
+<!--    });-->
+<!--};-->
+
+</script>
+
+{% endblock %}

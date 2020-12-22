@@ -1,0 +1,213 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Register New ATL Person</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form class="needs-validation" id="ATLPform" method="post"
+                           data-city-url="{% url 'ajax_load_city' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                {{ form.name|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.address|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.state|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.city|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                            </div>
+                        </div>
+                            <div class="col text-right">
+                                <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#atlpModal">Submit</button>
+                            </div>
+                        </div>
+                        <div class="modal fade bd-example-modal-lg" id="atlpModal" tabindex="-1" role="dialog" aria-labelledby="atlpModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="atlpModalLabel">Confirmation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div class="form-group">
+                                                <div class="table-responsive">
+                                                    <table class="table align-items-center table-flush">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col">Name</th>
+                                                                <th scope="col">Email</th>
+                                                                <th scope="col">Phone</th>
+                                                                <th scope="col">Address</th>
+                                                                <th scope="col">State</th>
+                                                                <th scope="col">City</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="name"></td>
+                                                                <td id="email"></td>
+                                                                <td id="phone"></td>
+                                                                <td id="address"></td>
+                                                                <td id="state"></td>
+                                                                <td id="city"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" name="add_atl_person" class="btn btn-primary my-4">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">ATL Person</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Password</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for at in atlp %}
+                        <tr>
+                            <th scope="row">
+                                <form action="{% url 'delete_atlp' pk=at.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#confModal">Delete</button>
+                                    <a href="{% url 'atl_person_details' pk=at.pk %}" type="button" class="btn btn-secondary btn-sm">View</a>
+                                    <div class="modal fade bd-example-modal-lg" id="confModal" tabindex="-1" role="dialog" aria-labelledby="confModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confModalLabel">Confirmation</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to delete the ATL-Person Account?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                    <input class="btn btn-secondary" type="submit" value="Delete"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form></th>
+                            <td>{{at.name}}</td>
+                            <td>{{at.email}}</td>
+                            <td>{{at.phone}}</td>
+                            <td>{{at.user.username}}</td>
+                            <td>{{at.password}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  function checkData() {
+    $("#name").html($("#id_name").val());
+    $("#email").html($("#id_email").val());
+    $("#phone").html($("#id_phone").val());
+    $("#address").html($("#id_address").val());
+    $("#state").html($("#id_state option:selected").text());
+    $("#city").html($("#id_city option:selected").text());
+
+    };
+
+  $("#id_state").change(function () {
+      var url = $("#ATLPform").attr("data-city-url");  // get the url of the `load_cities` view
+      stateId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'state': stateId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+  $("#id_city").change(function () {
+      var url = $("#Tform").attr("data-school-url");  // get the url of the `load_cities` view
+      cityId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'city': cityId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_school").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+</script>
+{% endblock %}
+

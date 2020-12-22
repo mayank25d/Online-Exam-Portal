@@ -1,0 +1,323 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div id="id01">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Register New School</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form  method="post" class="needs-validation" id="schoolform" data-city-url="{% url 'ajax_load_city' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.school_name|as_crispy_field }}
+    <!--                                <input type="text" class="form-control form-control-alternative" name="school_name" placeholder="School Name" required>-->
+                                </div>
+                                <div class="col">
+                                    {{ form.email|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    {{ form.phone|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.address|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.state|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    {{ form.city|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.school_board|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    {{ form.incharge_name|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    {{ form.incharge_email|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.atl|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col text-right">
+                                    <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#schoolModal">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade bd-example-modal-lg" id="schoolModal" tabindex="-1" role="dialog" aria-labelledby="schoolModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="schoolModalLabel">Confirmation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div class="form-group">
+                                                <div class="table-responsive">
+                                                    <table class="table align-items-center table-flush">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col">School Name</th>
+                                                                <th scope="col">Email</th>
+                                                                <th scope="col">Phone</th>
+                                                                <th scope="col">Address</th>
+                                                                <th scope="col">State</th>
+                                                                <th scope="col">City</th>
+                                                                <th scope="col">School Board</th>
+                                                                <th scope="col">Principal</th>
+                                                                <th scope="col">Principal's Email</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="school_name"></td>
+                                                                <td id="email"></td>
+                                                                <td id="phone"></td>
+                                                                <td id="address"></td>
+                                                                <td id="state"></td>
+                                                                <td id="city"></td>
+                                                                <td id="school_board"></td>
+                                                                <td id="incharge_name"></td>
+                                                                <td id="incharge_email"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" name="add_school" class="btn btn-primary my-4">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" id="schoolbulkform"
+                          data-city-url="{% url 'ajax_load_city' %}" name="bulkadd">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <hr class="my-3">
+                                <h6 class="navbar-heading p-0 text-muted">
+                                <span class="docs-normal center">OR, Upload data with file</span>
+                                </h6>
+                            <hr class="my-3">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="selectstate" name="mystate">State*</label>
+                                    <select class="form-control" id="selectstate" name="mystate" required>
+                                        <option value="">---------</option>
+                                        {% for mys in mystate %}
+                                        <option value="{{ mys.pk }}">{{ mys }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="selectcity" name="mycity">City*</label>
+                                    <select class="form-control" id="selectcity" name="mycity" required>
+                                        <option value="">---------</option>
+                                        {% for myc in mycity %}
+                                        <option value="{{ myc.pk }}">{{ myc }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="selectboard" name="myboard">School Board*</label>
+                                    <select class="form-control" id="selectboard" name="myboard" required>
+                                        <option value="">---------</option>
+                                        {% for b in board %}
+                                        <option value="{{ b.pk }}">{{ b }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="custom-file mb-3">
+                                        <input type="file" name="file" class="custom-file-input" id="validate_file" required>
+                                        <label class="custom-file-label" for="validate_file">Choose file...</label>
+                                        <small id="emailHelp" class="form-text text-muted">
+                                            Note*: Don't include ,(comas) in the fields. Use 0 (for Non-ATL) and 1 (for ATL). Check the data twice before uploading the file.</small>
+                                    </div>
+                                    <button type="submit" name="file_upload" class="btn btn-primary my-4">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    {% if 'error_loading_file' in message.tags %}
+                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                    {% endif %}
+                                    {% if 'incorrect_file_format' in message.tags %}
+                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">School Profiles</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">School Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone-No</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Password</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for sc in school %}
+                        <tr>
+                            <th scope="row">
+                                <form action="{% url 'delete_school' pk=sc.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#confSchModal">Delete</button>
+                                    <a href="{% url 'school_details' pk=sc.pk %}" type="button" class="btn btn-secondary btn-sm">View</a>
+                                    <div class="modal fade bd-example-modal-lg" id="confSchModal" tabindex="-1" role="dialog" aria-labelledby="confSchModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confSchModalLabel">Confirmation</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Deleting a School will also delete all the records associated with it.</p>
+                                                    <p>Do you still want to do this?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                    <input class="btn btn-secondary" type="submit" value="Delete"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form></th>
+                            <td>{{sc.school_name|title}}</td>
+                            <td>{{sc.email}}</td>
+                            <td>{{sc.phone}}</td>
+                            <td>{{sc.user.username}}</td>
+                            <td>{{sc.password}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  var modal = document.getElementById('id01');
+  var error = "{{error}}";
+
+  if (error){
+    document.getElementById('id01').style.display='block';
+    $('#hint_id_password1').hide();
+
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        //document.getElementById('table').style.display ='block';
+    }
+  }
+
+  function checkData() {
+    $("#school_name").html($("#id_school_name").val());
+    $("#email").html($("#id_email").val());
+    $("#phone").html($("#id_phone").val());
+    $("#address").html($("#id_address").val());
+    $("#state").html($("#id_state option:selected").text());
+    $("#city").html($("#id_city option:selected").text());
+    $("#school_board").html($("#id_school_board option:selected").text());
+    $("#incharge_name").html($("#id_incharge_name").val());
+    $("#incharge_email").html($("#id_incharge_email").val());
+
+    };
+
+  $("#id_state").change(function () {
+      var url = $("#schoolform").attr("data-city-url");  // get the url of the `load_cities` view
+      stateId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'state': stateId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+  $("#selectstate").change(function () {
+      var url = $("#schoolbulkform").attr("data-city-url");  // get the url of the `load_cities` view
+      stateId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'state': stateId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#selectcity").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+</script>
+{% endblock %}
+

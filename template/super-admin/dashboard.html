@@ -1,0 +1,313 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% load static %}
+
+    <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Total Students</h5>
+                      <span class="h2 font-weight-bold mb-0">{{ total_stu.count }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                        <i class="ni ni-active-40"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Total Teachers</h5>
+                      <span class="h2 font-weight-bold mb-0">{{ total_t.count }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                        <i class="ni ni-chart-pie-35"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Total Schools</h5>
+                      <span class="h2 font-weight-bold mb-0">{{ total_sch.count }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                        <i class="ni ni-money-coins"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Authority Accounts</h5>
+                      <span class="h2 font-weight-bold mb-0">{{ total_auth.count }}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                        <i class="ni ni-chart-bar-32"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+      <div class="row">
+        <div class="col-xl-8">
+          <div class="card bg-default">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-light text-uppercase ls-1 mb-1">Overview {{ year }}</h6>
+                  <h5 class="h3 text-white mb-0">New Accounts</h5>
+                </div>
+                <div class="col">
+                  <ul class="nav nav-pills justify-content-end">
+                    <li class="nav-item mr-2 mr-md-0">
+                      <a href="#" id="school_chart" class="nav-link py-2 px-3 active" data-toggle="tab">
+                        <span class="d-none d-md-block">Schools</span>
+                        <span class="d-md-none">Sch</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" id="student_chart" class="nav-link py-2 px-3" data-toggle="tab">
+                        <span class="d-none d-md-block">Students</span>
+                        <span class="d-md-none">Stu</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div id="graph-container" class="chart">
+                <!-- Chart wrapper -->
+                <canvas id="chart-sales_dark" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4">
+          <div class="card">
+            <div class="card-header bg-transparent">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h6 class="text-uppercase text-muted ls-1 mb-1">Freelancer</h6>
+                  <h5 class="h3 mb-0">New Accounts</h5>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Chart -->
+              <div id="bars-chart" class="chart">
+                <canvas id="chart-bars" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-8">
+          <div class="card">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">School Data</h3>
+                </div>
+                <div class="col text-right">
+                  <a href="{% url 'all_school' %}" class="btn btn-sm btn-primary">See all</a>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">School</th>
+                    <th scope="col">Students</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for sch, stu in top_5_school %}
+                  <tr>
+                    <td>{{sch}}</td>
+                    <td>{{stu}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4">
+          <div class="card">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h4 class="mb-0">Freelancing Teachers</h4>
+                </div>
+                <div class="col text-right">
+                  <a href="{% url 'all_tfreelancer' %}" class="btn btn-sm btn-primary">See all</a>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Teacher</th>
+                    <th scope="col">Students</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for tea, stu in top_5_teacher %}
+                  <tr>
+                    <td>{{tea}}</td>
+                    <td>{{stu}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/js-cookie/js.cookie.js' %}"></script>
+<script src="{% static 'vendor/jquery.scrollbar/jquery.scrollbar.min.js' %}"></script>
+<script src="{% static 'vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js' %}"></script>
+<!-- Optional JS -->
+<script src="{% static 'vendor/chart.js/dist/Chart.min.js' %}"></script>
+<script src="{% static 'vendor/chart.js/dist/Chart.extension.js' %}"></script>
+<script src="{% static 'vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<!-- Argon JS -->
+<script src="{% static 'js/argon.js' %}"></script>
+<script>
+var colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
+var d = new Date();
+var n = d.getMonth();
+
+$(function() {
+var data_value_sch = {{ data.scjoin }};
+var labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+var data_value_tf = {{ data.tfjoin }};
+if (n > 6) {
+  var labels_bar = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  } else {
+  var labels_bar = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+  }
+
+render_chart(data_value_sch, labels, "chart-sales_dark", 'line', 'pink', colors[0] );
+
+$("#chart-bars").remove();
+$("#bars-chart").append('<canvas id="chart-bars" class="chart-canvas"></canvas>');
+render_chart(data_value_tf, labels_bar, "chart-bars", "bar" );
+
+});
+
+$("#school_chart").click(function() {
+  $('#chart-sales_dark').remove(); // this is my <canvas> element
+  $('#graph-container').append('<canvas id="chart-sales_dark" class="chart-canvas"></canvas>');
+  var data_value_sch = {{ data.scjoin }};
+  var labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+  render_chart(data_value_sch, labels, "chart-sales_dark", 'line', 'pink', colors[0]);
+});
+
+$("#student_chart").click(function() {
+  $('#chart-sales_dark').remove(); // this is my <canvas> element
+  $('#graph-container').append('<canvas id="chart-sales_dark" class="chart-canvas"></canvas>');
+  var data_value_stu = {{ data.stjoin }};
+  var labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+  render_chart(data_value_stu, labels, "chart-sales_dark", 'line', 'pink', colors[0]);
+});
+
+function render_chart(data, labels, id, type, col1, col2, ) {
+    var ctx = document.getElementById(id).getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: type,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Count',
+                data: data,
+                backgroundColor: col1,
+                borderColor: col2,
+                borderWidth: 4,
+                pointBackgroundColor: col2
+            }]
+        },
+        options: {
+          elements:{
+                point:{
+                    radius: 2
+                }
+            },
+            scales: {
+              yAxes: [{
+                display: true,
+                gridLines: {
+                  display: true,
+                  drawTicks: true,
+                  lineWidth: 2,
+                  color: colors[0],
+                  zeroLineColor: colors[0]
+                },
+                ticks: {
+                  display: true,
+                  beginAtZero: false
+                }
+              }],
+              xAxes: [{
+                display: true,
+              }]
+            },
+          }
+    });
+};
+
+</script>
+
+{% endblock %}

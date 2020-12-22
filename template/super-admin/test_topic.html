@@ -1,0 +1,134 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div id="id01">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="nav-wrapper">
+                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" href="{% url 'add_sub' %}" aria-selected="true">
+                                <i class="ni ni-cloud-upload-96 mr-2"></i>Add Subject</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-2-tab" href="{% url 'test_topic' %}" aria-selected="true">
+                                <i class="ni ni-cloud-upload-96 mr-2"></i>Add Topic</a>
+                        </li>
+                    </ul>
+                </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="p-4 bg-secondary">
+                                    <form  method="post" class="needs-validation"id="studentform"
+                                           data-topic-url="{% url 'ajax_load_sub' %}" data-package-url="{% url 'ajax_load_package' %}">
+                                    {% csrf_token %}
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    {{ form.package|as_crispy_field }}
+                                                </div>
+                                                <div class="col">
+                                                    {{ form.standard|as_crispy_field }}
+                                                </div>
+                                                <div class="col">
+                                                    {{ form.sub_name|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    {{ form.topic_name|as_crispy_field }}
+                                                </div>
+                                                <div class="col"></div>
+                                                <div class="col"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="submit" class="btn btn-primary">Next</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Topics</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Package</th>
+                            <th scope="col">Standard</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Topic</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for tt in test_topic %}
+                        <tr>
+                            <td>{{tt.package}}</td>
+                            <td>{{tt.standard}}</td>
+                            <td>{{tt.sub_name}}</td>
+                            <td>{{tt.topic_name}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        //document.getElementById('table').style.display ='block';
+    }
+  }
+<!--var affiliationID = '1';-->
+
+$("#id_standard").change(function () {
+      var url = $("#studentform").attr("data-topic-url");
+      standardId = $(this).val();
+      packageId = $("#id_package").val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'standard': standardId,
+          'package': packageId
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_sub_name").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+});
+
+</script>
+
+{% endblock %}

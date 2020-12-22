@@ -1,0 +1,11 @@
+{% for ts in st %}
+<tr>
+    <td>{{ ts.0.school }}</td>
+    <td>{{ ts.0.teacher }}</td>
+    <td>{{ ts.0.section }}</td>
+    <td>{{ ts.1 }}</td>
+    <td>{{ ts.0.school.stu_limit }}</td>
+    <td>{{ ts.0.school.test_limit }}</td>
+    <td><input type="checkbox" class="form-check-input position-static" aria-label="..." name="selected" value="{{ts.0.id}}"></td>
+</tr>
+{% endfor %}

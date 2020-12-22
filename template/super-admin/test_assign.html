@@ -1,0 +1,257 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div id="id01">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="nav-wrapper">
+                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" href="{% url 'add_question' %}" aria-selected="false">
+                                <i class="ni ni-calendar-grid-58 mr-2"></i>Add Questions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" href="{% url 'create_test' %}" aria-selected="false">
+                                <i class="ni ni-bell-55 mr-2"></i>Create Test</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-5-tab" href="{% url 'assign_test' %}" aria-selected="false">
+                                <i class="ni ni-calendar-grid-58 mr-2"></i>Assign Test</a>
+                        </li>
+                    </ul>
+                </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="tabs-icons-text-1" aria-labelledby="tabs-icons-text-1-tab">
+                                    <div class="p-4 bg-secondary">
+                                        <form  method="post" class="needs-validation" id="testform"
+                                               data-city-url="{% url 'ajax_load_city' %}" data-school-url="{% url 'ajax_load_test_sch' %}"
+                                               data-teachers-url="{% url 'ajax_load_teachers' %}" data-std-url="{% url 'ajax_load_std' %}"
+                                               data-sub-url="{% url 'ajax_load_test_sub' %}">
+                                        {% csrf_token %}
+                                            <div class="form-check">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <input class="form-check-input" type="checkbox" id="atl_test" name="atl_test">
+                                                            <label class="form-check-label">ATL Based</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ form.standard|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form.subject|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col">
+                                                        <label>Quarter</label>
+                                                        <select class="form-control" id="quarter" name="quarter">
+                                                            <option value="">---------</option>
+                                                            {% for q in quarter %}
+                                                            <option value="{{q.pk}}">{{ q }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-4 col-auto">
+                                                        <label>Affiliation</label>
+                                                        <select class="form-control" id="board" name="board">
+                                                            <option value="">---------</option>
+                                                            {% for b in board %}
+                                                            <option value="{{b.pk}}">{{ b }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col"></div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-9">
+                                                            {{ form.test_paper|as_crispy_field }}
+                                                        </div>
+                                                        <div class="col">
+                                                            {{ form.test_date|as_crispy_field }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h2>Select School/Teacher</h2>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label>State*</label>
+                                                        <select class="form-control" id="state" name="state" required>
+                                                            <option value="">---------</option>
+                                                            {% for s in state %}
+                                                            <option value="{{s.pk}}">{{ s }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label>City*</label>
+                                                        <select class="form-control" id="city" name="city" required>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="table-responsive">
+                                                    <!-- Projects table -->
+                                                    <table class="table align-items-center table-flush">
+                                                        <thead class="thead-light">
+                                                        <tr>
+                                                            <th scope="col">School</th>
+                                                            <th scope="col">Teacher</th>
+                                                            <th scope="col">Section</th>
+                                                            <th scope="col">Total Students</th>
+                                                            <th scope="col">Student Limit</th>
+                                                            <th scope="col">Test Limit</th>
+                                                            <th></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="school">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <button type="submit" class="btn btn-primary">Assign</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if messages %}
+                                                <ul class="messages">
+                                                    {% for message in messages %}
+                                                        {% if 'test_assigned' in message.tags %}
+                                                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $(function(){
+
+    $('#changetabbutton').click(function(e){
+    	e.preventDefault();
+        $('#tabs-icons-text a[href="#tabs-icons-text-2"]').tab('show');
+    })
+
+    })
+
+$("#atl_test").prop('disabled', true);
+$("#board").prop('disabled', true);
+
+$(document).ready(atl_sub);
+
+$("#atl_test").change(function () {
+    var atl = $(this).is(":checked");
+    $("#board").prop('disabled', atl);
+
+});
+
+function atl_sub() {
+    $("#atl_test").prop('checked', true);
+    var url = $("#testform").attr("data-sub-url");
+    var atl = $("#atl_test").is(":checked");
+
+    $.ajax({
+        url: url,
+        data: {
+            'atl': atl
+        },
+        success: function (data) {
+            $("#id_subject").html(data);
+        }
+    });
+};
+
+$("#state").change(function () {
+  var url = $("#testform").attr("data-city-url");
+  var stateId = $(this).val();
+
+  $.ajax({
+    url: url,
+    data: {
+      'state': stateId
+    },
+    success: function (data) {
+      $("#city").html(data);
+    }
+  });
+
+});
+
+$("#city").change(function () {
+      var url = $("#testform").attr("data-school-url");
+      var cityId = $(this).val();
+      var stdId = $("#id_standard").val();
+      var subId = $("#id_subject").val();
+      var testId = $("#id_test_paper").val();
+      var atl = $("#atl_test").is(":checked");
+
+      $.ajax({
+        url: url,
+        data: {
+          'city': cityId,
+          'standard': stdId,
+          'subject': subId,
+          'test_paper': testId,
+          'atl': atl
+        },
+        success: function (data) {
+          $("#school").html(data);
+        }
+      });
+});
+
+$("#id_standard").change(function () {
+    var url = $("#testform").attr("data-student-url");
+    var standardId = $(this).val();
+    var teacherId = $("#id_teacher").val();
+
+    $.ajax({
+        url: url,
+        data: {
+          'standard': standardId,
+          'teacher': teacherId
+        },
+        success: function (data) {
+          $("#id_student").html(data);
+        }
+      });
+});
+
+</script>
+
+{% endblock %}

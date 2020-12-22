@@ -1,0 +1,123 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Add Package</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form  method="post" class="needs-validation">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    {{ packageform.package|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary my-4">Add User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Add Boards</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form  method="post" class="needs-validation">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    {{ boardform.affiliation_name|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary my-4">Add User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">ATL Packages</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+<!--                     Projects table-->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Package</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for p in packages %}
+                        <tr>
+                            <th scope="row">{{p.id}}</th>
+                            <td>{{p.package}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Affiliation Boards</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+<!--                     Projects table-->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Affiliation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for b in boards %}
+                        <tr>
+                            <th scope="row">{{b.id}}</th>
+                            <td>{{b.affiliation_name}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

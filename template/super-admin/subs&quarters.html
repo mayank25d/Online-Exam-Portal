@@ -1,0 +1,122 @@
+{% extend ./base.html %}
+{% load crispy_form_tags %}
+
+{% block content %}
+
+<div id="id01">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Register New School</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form  method="post" class="needs-validation">
+                        {% csrf_token %}
+                        <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                {{ form.school_name|as_crispy_field }}
+<!--                                <input type="text" class="form-control form-control-alternative" name="school_name" placeholder="School Name" required>-->
+                            </div>
+                            <div class="col">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.address|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.school_board|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.incharge_name|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.incharge_email|as_crispy_field }}
+                            </div>
+                        </div>
+                            <div class="col text-right">
+                                <button type="submit" class="btn btn-primary my-4">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">School Profiles</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">School ID</th>
+                            <th scope="col">School Name</th>
+                            <th scope="col">Authority</th>
+                            <th scope="col">School Email</th>
+                            <th scope="col">School Username</th>
+                            <th scope="col">Password</th>
+                            <th scope="col">In-charge Name</th>
+                            <th scope="col">In-charge Email</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for sc in school %}
+                        <tr>
+                            <th scope="row">{{sc.id}}</th>
+                            <td>{{sc.school_name|title}}</td>
+                            <td>{{sc.school_board|title}}</td>
+                            <td>{{sc.email}}</td>
+                            <td>{{sc.user.username}}</td>
+                            <td>{{sc.password}}</td>
+                            <td>{{sc.incharge_name}}</td>
+                            <td>{{sc.incharge_email}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!--<script>-->
+<!--    var modal = document.getElementById('id01');-->
+<!--  var error = "{{error}}";-->
+
+<!--  if (error){-->
+<!--    document.getElementById('id01').style.display='block';-->
+<!--    $('#hint_id_password1').hide();-->
+
+<!--  }-->
+
+<!--  window.onclick = function(event) {-->
+<!--    if (event.target == modal) {-->
+<!--        modal.style.display = "none";-->
+<!--        //document.getElementById('table').style.display ='block';-->
+<!--    }-->
+<!--  }-->
+
+<!--</script>-->
+{% endblock %}

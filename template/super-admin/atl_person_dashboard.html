@@ -1,0 +1,174 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% load static %}
+
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row">
+        <div class="col">
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="nav-wrapper">
+                <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" href="{% url 'atl_person_details' pk %}" aria-selected="true">
+                            <i class="ni ni-cloud-upload-96 mr-2"></i>School ATL Incharge</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" href="{% url 'vendor_data' pk %}" aria-selected="true">
+                            <i class="ni ni-cloud-upload-96 mr-2"></i>Vendor Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" href="{% url 'lab_reg_data' pk %}" aria-selected="true">
+                            <i class="ni ni-cloud-upload-96 mr-2"></i>Lab Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" href="{% url 'mentor_data' pk %}" aria-selected="true">
+                            <i class="ni ni-cloud-upload-96 mr-2"></i>Mentor Of Change</a>
+                    </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-xl-12">
+    <div class="card mt-n5">
+      <div class="p-4 bg-secondary">
+        <form method="post" class="needs-validation" id="schooleditform" data-city-url="{% url 'ajax_load_city' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        {{ form1.school_name|as_crispy_field }}
+                    </div>
+                    <div class="col">
+                        {{ form1.school_regId|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <h3>Address Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            {{ form1.country|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{ form1.state|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ form1.city|as_crispy_field }}
+                        </div>
+                        <div class="col">
+                            {{ form1.pin_code|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form1.email|as_crispy_field }}
+                    </div>
+                    <div class="col">
+                        {{ form1.phone|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form1.affiliation|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" id="affi_body" name="other_affi" placeholder="Other Board" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#Modal">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade bd-example-modal-lg" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalLabel">Confirmation</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="form-group">
+                                    <div class="table-responsive">
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col">School Name</th>
+                                                    <th scope="col">Registration ID</th>
+                                                    <th scope="col">Country</th>
+                                                    <th scope="col">State</th>
+                                                    <th scope="col">City</th>
+                                                    <th scope="col">Pin-Code</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Phone</th>
+                                                    <th scope="col">Affiliation Body</th>
+                                                    <th scope="col">Other Board</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td id="school_name"></td>
+                                                    <td id="school_reg"></td>
+                                                    <td id="country"></td>
+                                                    <td id="state"></td>
+                                                    <td id="city"></td>
+                                                    <td id="pincode"></td>
+                                                    <td id="email"></td>
+                                                    <td id="phone"></td>
+                                                    <td id="affiliation_body"></td>
+                                                    <td id="other_affi"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" name="add_school_details" class="btn btn-primary my-4">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        {% if 'data_add_success' in message.tags %}
+                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                        {% endif %}
+                        {% if 'incorrect_format' in message.tags %}
+                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </form>
+      </div>
+    </div>
+</div>
+{% endblock %}

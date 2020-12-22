@@ -1,0 +1,137 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">School Profiles</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" id="schoolbulkform"
+                          data-city-url="{% url 'ajax_load_city' %}" name="bulkadd">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="selectstate" name="mystate">State*</label>
+                                    <select class="form-control" id="selectstate" name="mystate" required>
+                                        <option value="">---------</option>
+                                        {% for mys in state %}
+                                        <option value="{{ mys.pk }}">{{ mys }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="selectcity" name="mycity">City*</label>
+                                    <select class="form-control" id="selectcity" name="mycity" required>
+                                        <option value="">---------</option>
+                                        {% for myc in city %}
+                                        <option value="{{ myc.pk }}">{{ myc }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="selectboard" name="myboard">School Board*</label>
+                                    <select class="form-control" id="selectboard" name="myboard" required>
+                                        <option value="">---------</option>
+                                        {% for b in board %}
+                                        <option value="{{ b.pk }}">{{ b }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <button type="submit" name="school_sort" class="btn btn-primary my-4">Sort</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">School Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone-No</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Password</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for sc in school %}
+                        <tr>
+                            <th scope="row">
+                                <form action="{% url 'delete_school' pk=sc.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#confSchModal">Delete</button>
+                                    <a href="{% url 'school_details' pk=sc.pk %}" type="button" class="btn btn-secondary btn-sm">View</a>
+                                    <div class="modal fade bd-example-modal-lg" id="confSchModal" tabindex="-1" role="dialog" aria-labelledby="confSchModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confSchModalLabel">Confirmation</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Deleting a School will also delete all the records associated with it.</p>
+                                                    <p>Do you still want to do this?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                    <input class="btn btn-secondary" type="submit" value="Delete"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form></th>
+                            <td>{{sc.school_name|title}}</td>
+                            <td>{{sc.email}}</td>
+                            <td>{{sc.phone}}</td>
+                            <td>{{sc.user.username}}</td>
+                            <td>{{sc.password}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#selectstate").change(function () {
+      var url = $("#schoolbulkform").attr("data-city-url");  // get the url of the `load_cities` view
+      stateId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'state': stateId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#selectcity").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+</script>
+
+
+{% endblock %}
+

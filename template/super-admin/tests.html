@@ -1,0 +1,359 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div id="id01">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="nav-wrapper">
+                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" href="{% url 'add_question' %}" aria-selected="false">
+                                <i class="ni ni-calendar-grid-58 mr-2"></i>Add Questions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-3-tab" href="{% url 'create_test' %}" aria-selected="false">
+                                <i class="ni ni-bell-55 mr-2"></i>Create Test</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab" href="{% url 'assign_test' %}" aria-selected="false">
+                                <i class="ni ni-calendar-grid-58 mr-2"></i>Test Assign</a>
+                        </li>
+                    </ul>
+                </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="tabs-icons-text-1" aria-labelledby="tabs-icons-text-1-tab">
+                                    <div class="p-4 bg-secondary">
+                                        <form  method="post" class="needs-validation" id="studentform"
+                                           data-sub-url="{% url 'ajax_load_sub' %}" data-package-url="{% url 'ajax_load_package' %}"
+                                           data-topic-url="{% url 'ajax_load_topic' %}" data-atl-url="{% url 'ajax_atl_active' %}"
+                                           data-que-url="{% url 'ajax_load_que' %}">
+                                        {% csrf_token %}
+                                            <div class="form-check">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <input class="form-check-input" type="checkbox" id="atl_que" name="atl_que">
+                                                            <label class="form-check-label">ATL Based</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ form.affiliation|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form.quarter|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form.package|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form.standard|as_crispy_field }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ form.sub_name|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form.test_duration|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col"></div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h2>Add Questions</h2>
+                                                </div>
+                                            </div>
+                                            <div class="card-body" id="top_level">
+                                                <div id="add_que0" class="add_que">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-4">
+                                                                <label>Topic<span class="requiredField">*</span></label>
+                                                                <select class="form-control topic_name" id="topic0" name="topic_name"></select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <!-- Projects table -->
+                                                        <table class="table align-items-center table-flush">
+                                                            <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col">Question</th>
+                                                                <th scope="col">Type</th>
+                                                                <th scope="col">Marks</th>
+                                                                <th scope="col">Select</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="question0">
+                                                                <tr>
+                                                                    <th scope="row"></th>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col"></div>
+                                                            <div class="col-auto">
+                                                                <button type="button" class="btn btn-danger btn-sm remove">Remove Topic</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <button type="button" id="add" class="btn btn-success btn-sm add">Add Topic +</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <button type="submit" class="btn btn-primary">Save</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if messages %}
+                                                <ul class="messages">
+                                                    {% for message in messages %}
+                                                        {% if 'test_created' in message.tags %}
+                                                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Existing Tests</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Test</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for t in test %}
+                        <tr>
+                            <th scope="row">
+                                <form action="{% url 'delete_test' pk=t.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#confSchModal">Delete</button>
+<!--                                    <a href="{% url 'test_details' pk=t.pk %}" type="button" id="view" class="btn btn-secondary btn-sm">View</a>-->
+                                    <div class="modal fade bd-example-modal-lg" id="confSchModal" tabindex="-1" role="dialog" aria-labelledby="confSchModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confSchModalLabel">Confirmation</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Do you really want to delete the test?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                    <input class="btn btn-secondary" type="submit" value="Delete"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form></th>
+                            <td>{{t}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$(function(){
+    $('#changetabbutton').click(function(e){
+    	e.preventDefault();
+        $('#tabs-icons-text a[href="#tabs-icons-text-2"]').tab('show');
+    });
+
+});
+
+var regex = /^(.+?)(\d+)$/i;
+var cloneIndex = $(".add_que").length;
+
+function clone(){
+    $("button.remove").parents("#add_que0").clone(true, true)
+        .appendTo("#top_level")
+        .attr("id", "add_que" +  cloneIndex)
+        .find("*")
+        .each(function() {
+            var id = this.id || "";
+            var match = id.match(regex) || [];
+            if (match.length == 3) {
+                this.id = match[1] + (cloneIndex);
+            }
+
+            if (id.slice(0,5) == 'topic') {
+                $(this).on('change', function () {
+                    var url = $("#studentform").attr("data-que-url");
+                    var topicId = $(this).val();
+                    $.ajax({
+                        url: url,
+                        data: {
+                            'topic_name': topicId,
+                            'sub_name': subjectId,
+                            'package': packageId,
+                            'standard': standardId
+                        },
+                        success: function (data) {
+                            $("#question" + (cloneIndex-1)).html(data);
+                        }
+                    });
+
+                });
+            }
+        })
+        .on('click', 'button.remove', remove);
+    cloneIndex++;
+}
+function remove(){
+    $(this).parents(".add_que").remove();
+}
+$("button.add").on("click", clone);
+$("button.remove").on("click", remove);
+
+$("#atl_que").change(function () {
+    var url1 = $("#studentform").attr("data-atl-url");
+    atl = $(this).is(":checked");
+
+    $("#id_affiliation").prop('disabled', atl);
+
+    $.ajax({
+        url: url1,
+        data: {
+            'atl': atl
+        },
+        success: function (data) {
+            $("#id_package").html(data);
+        }
+    });
+});
+
+$("#num_que").change(function () {
+    var num_que = $(this).val();
+    $("#que").children().remove();
+
+    for(i=1; i<=num_que; i++) {
+        $("#que").append('<div class="form-group">' +
+                '<div class="row">' +
+                   '<div class="col-8">' +
+                       '<label>Question*</label>' +
+                       '<select class="form-control" id="question'+i+'" name="question'+i+'"></select>' +
+                   '</div>' +
+                   '<div class="col">' +
+                       '<label>Marks</label>' +
+                       '<input class="form-control" type="text" id="value'+i+'" name="value'+i+'">' +
+                   '</div>' +
+               '</div>' +
+               '</div>');
+    }
+});
+
+$("#id_standard").change(function () {
+      var url = $("#studentform").attr("data-sub-url");
+      standardId = $(this).val();
+      packageId = $("#id_package").val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'package': packageId,
+          'standard': standardId
+        },
+        success: function (data) {
+          $("#id_sub_name").html(data);
+        }
+      });
+
+    });
+
+$("#id_sub_name").change(function () {
+      var url = $("#studentform").attr("data-topic-url");
+      subjectId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'sub_name': subjectId,
+          'package': packageId,
+          'standard': standardId
+        },
+        success: function (data) {
+          $(".topic_name").html(data);
+        }
+      });
+
+    });
+
+$(".topic_name").on('change', function () {
+      var url = $("#studentform").attr("data-que-url");
+      var topicId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'topic_name': topicId,
+          'sub_name': subjectId,
+          'package': packageId,
+          'standard': standardId
+        },
+        success: function (data) {
+          $("#question0").html(data);
+        }
+      });
+
+    });
+
+</script>
+
+{% endblock %}

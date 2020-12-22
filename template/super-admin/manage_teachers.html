@@ -1,0 +1,390 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div id="id01">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Register New Teacher</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form class="needs-validation" id="Tform" method="post" name="teacherForm"
+                           data-school-url="{% url 'ajax_load_school' %}" data-subject-url="{% url 'ajax_load_subject' %}"
+                           data-city-url="{% url 'ajax_load_city' %}">
+                        {% csrf_token %}
+                        <div class="form-check">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <input class="form-check-input" type="checkbox" id="fl" name="fl">
+                                        <label class="form-check-label">Freelancer</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                {{ form.teacher_name|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.address|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.state|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.city|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form.enrollment_no|as_crispy_field }}
+                            </div>
+                            <div class="col">
+                                {{ form.school|as_crispy_field }}
+                            </div>
+                        </div>
+                            <div class="col text-right">
+                                <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+                            </div>
+                        </div>
+                        <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <div class="form-group">
+                                                <div class="table-responsive">
+                                                    <table class="table align-items-center table-flush">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col">Teacher Name</th>
+                                                                <th scope="col">Email</th>
+                                                                <th scope="col">Phone</th>
+                                                                <th scope="col">Address</th>
+                                                                <th scope="col">State</th>
+                                                                <th scope="col">City</th>
+                                                                <th scope="col">School</th>
+                                                                <th scope="col">Enrollment No</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="teacher_name"></td>
+                                                                <td id="email"></td>
+                                                                <td id="phone"></td>
+                                                                <td id="address"></td>
+                                                                <td id="state"></td>
+                                                                <td id="city"></td>
+                                                                <td id="school"></td>
+                                                                <td id="enrollment_no"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" name="add_teacher" class="btn btn-primary my-4">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" id="teacherbulkform"
+                          data-city-url="{% url 'ajax_load_city' %}" data-school-url="{% url 'ajax_load_school' %}" name="bulkaddt">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <hr class="my-3">
+                                <h6 class="navbar-heading p-0 text-muted">
+                                <span class="docs-normal center">OR, Upload data with file</span>
+                                </h6>
+                            <hr class="my-3">
+                            <div class="form-check">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            <input class="form-check-input" type="checkbox" id="fl-2" name="fl-2">
+                                            <label class="form-check-label">Freelancer</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="selectstate" name="mystate">State*</label>
+                                    <select class="form-control" id="selectstate" name="mystate" required>
+                                        <option value="">---------</option>
+                                        {% for s in state %}
+                                        <option value="{{ s.pk }}">{{ s }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="selectcity" name="mycity">City*</label>
+                                    <select class="form-control" id="selectcity" name="mycity" required>
+                                        <option value="">---------</option>
+                                        {% for myc in mycity %}
+                                        <option value="{{ myc.pk }}">{{ myc }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="selectschool" name="myschool">School</label>
+                                    <select class="form-control" id="selectschool" name="myschool">
+                                        <option value="">---------</option>
+                                        {% for s in school %}
+                                        <option value="{{ s.pk }}">{{ s }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="custom-file mb-3">
+                                        <input type="file" name="file" class="custom-file-input" id="validate_file" required>
+                                        <label class="custom-file-label" for="validate_file">Choose file...</label>
+                                        <small id="emailHelp" class="form-text text-muted">
+                                            Note*: Don't include ,(comas) in the fields. Use 0 (for Non-ATL) and 1 (for ATL). Check the data twice before uploading the file.</small>
+                                    </div>
+                                    <button type="submit" name="file_upload_T" class="btn btn-primary my-4">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    {% if 'error_loading_file' in message.tags %}
+                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                    {% endif %}
+                                    {% if 'incorrect_file_format' in message.tags %}
+                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Teacher Profiles</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Teacher Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Password</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for tc in teacher %}
+                        <tr>
+                            <th scope="row">
+                                <form action="{% url 'delete_teacher' pk=tc.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#confModal">Delete</button>
+                                    <a href="{% url 'teacher_details' pk=tc.pk %}" type="button" class="btn btn-secondary btn-sm">View</a>
+                                    <div class="modal fade bd-example-modal-lg" id="confModal" tabindex="-1" role="dialog" aria-labelledby="confModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confModalLabel">Confirmation</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Deleting a teacher will also delete all the records associated with her/him.</p>
+                                                    <p>Do you still want to do this?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                    <input class="btn btn-secondary" type="submit" value="Delete"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form></th>
+                            <td>{{tc.teacher_name|title}}</td>
+                            <td>{{tc.email}}</td>
+                            <td>{{tc.phone}}</td>
+                            <td>{{tc.user.username}}</td>
+                            <td>{{tc.password}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  var modal = document.getElementById('id01');
+  var error = "{{error}}";
+
+  if (error){
+    document.getElementById('id01').style.display='block';
+    $('#hint_id_password1').hide();
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        //document.getElementById('table').style.display ='block';
+    }
+  }
+
+  $("#fl").change(function () {
+    t_type = $(this).is(":checked");
+    $("#id_school").prop('disabled', t_type);
+  });
+
+  $("#fl-2").change(function () {
+    t_type = $(this).is(":checked");
+    $("#selectschool").prop('disabled', t_type);
+  });
+
+  function checkData() {
+    $("#teacher_name").html($("#id_teacher_name").val());
+    $("#email").html($("#id_email").val());
+    $("#phone").html($("#id_phone").val());
+    $("#address").html($("#id_address").val());
+    $("#state").html($("#id_state option:selected").text());
+    $("#city").html($("#id_city option:selected").text());
+    $("#school").html($("#id_school option:selected").text());
+    $("#enrollment_no").html($("#id_enrollment_no ").val());
+
+    };
+
+  $("#id_state").change(function () {
+      var url = $("#Tform").attr("data-city-url");  // get the url of the `load_cities` view
+      stateId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'state': stateId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+  $("#id_city").change(function () {
+      var url = $("#Tform").attr("data-school-url");  // get the url of the `load_cities` view
+      cityId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'city': cityId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_school").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+  });
+
+  $("#id_school").change(function () {
+    var url = $("#Tform").attr("data-subject-url");
+    schoolId = $(this).val();
+
+    $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'school': schoolId     // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_subject").html(data);  // replace the contents of the city input with the data that came from the server
+            }
+      });
+
+  });
+
+  $("#selectstate").change(function () {
+      var url = $("#teacherbulkform").attr("data-city-url");
+      stateId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'state': stateId
+        },
+        success: function (data) {
+          $("#selectcity").html(data);
+        }
+      });
+
+  });
+
+  $("#selectcity").change(function () {
+      var url = $("#teacherbulkform").attr("data-school-url");
+      cityId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'city': cityId
+        },
+        success: function (data) {
+          $("#selectschool").html(data);
+        }
+      });
+
+  });
+
+
+</script>
+{% endblock %}
+

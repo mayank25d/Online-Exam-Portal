@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for c_nm in city_nm %}
+<option value="{{ c_nm.pk }}">{{ c_nm.slug }}</option>
+{% endfor %}

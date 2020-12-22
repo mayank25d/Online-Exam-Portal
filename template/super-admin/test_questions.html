@@ -1,0 +1,303 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div id="id01">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="nav-wrapper">
+                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-4-tab" href="{% url 'add_question' %}" aria-selected="false">
+                                <i class="ni ni-calendar-grid-58 mr-2"></i>Add Questions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" href="{% url 'create_test' %}" aria-selected="false">
+                                <i class="ni ni-bell-55 mr-2"></i>Create Test</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab" href="{% url 'assign_test' %}" aria-selected="false">
+                                <i class="ni ni-calendar-grid-58 mr-2"></i>Assign Test</a>
+                        </li>
+                    </ul>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="p-4 bg-secondary">
+                                    <form  method="post" class="needs-validation" id="studentform"
+                                           data-sub-url="{% url 'ajax_load_sub' %}" data-topic-url="{% url 'ajax_load_topic' %}"
+                                           data-opt-url="{% url 'ajax_save_opt' %}" data-atlque-url="{% url 'ajax_atlque_active' %}"
+                                           data-atl-url="{% url 'ajax_atl_active' %}">
+                                        {% csrf_token %}
+                                        <div class="form-check">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <input class="form-check-input" type="checkbox" id="atl_que" name="atl_que">
+                                                        <label class="form-check-label">ATL Based</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    {{ form_que.package|as_crispy_field }}
+                                                </div>
+                                                <div class="col">
+                                                    {{ form_que.standard|as_crispy_field }}
+                                                </div>
+                                                <div class="col">
+                                                    {{ form_que.sub_name|as_crispy_field }}
+                                                </div>
+                                                <div class="col">
+                                                    {{ form_que.topic|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="add_remove" id="one">
+                                            <div class="add_remove_child" id="children_1">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            {{ form_que.question_tags|as_crispy_field }}
+                                                        </div>
+                                                        <div class="col">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            {{ form_que.question|as_crispy_field }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group change_opt" id="options">
+                                                    <div class="table-responsive">
+                                                        <table class="table align-items-center table-flush">
+                                                            <label>Options*</label>
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>{{ form_opt1.is_valid|as_crispy_field }}
+                                                                    {{ form_opt1.option|as_crispy_field }}</td>
+                                                                <td>{{ form_opt2.is_valid|as_crispy_field }}
+                                                                    {{ form_opt2.option|as_crispy_field }}</td>
+                                                                <td>{{ form_opt3.is_valid|as_crispy_field }}
+                                                                    {{ form_opt3.option|as_crispy_field }}</td>
+                                                                <td>{{ form_opt4.is_valid|as_crispy_field }}
+                                                                    {{ form_opt4.option|as_crispy_field }}</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col text-right">
+                                                    <button type="submit" name='add_que' class="btn btn-primary">Add Question</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form method="post" enctype="multipart/form-data" class="needs-validation" id="quebulkform"
+                                          data-city-url="{% url 'ajax_load_city' %}" data-school-url="{% url 'ajax_load_school' %}"
+                                           data-teachers-url="{% url 'ajax_load_teachers' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <hr class="my-3">
+                                                <h6 class="navbar-heading p-0 text-muted">
+                                                <span class="docs-normal center">OR, Upload data with file</span>
+                                                </h6>
+                                            <hr class="my-3">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="package">Package</label>
+                                                    <select class="form-control" id="package" name="package" required>
+                                                        <option value="">---------</option>
+                                                        {% for p in package %}
+                                                        <option value="{{ p.pk }}">{{ p }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="standard">Standard</label>
+                                                    <select class="form-control" id="standard" name="standard" required>
+                                                        <option value="">---------</option>
+                                                        {% for s in standard %}
+                                                        <option value="{{ s.pk }}">{{ s }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="sub_name">Subject</label>
+                                                    <select class="form-control" id="sub_name" name="sub_name" required>
+                                                        <option value="">---------</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="topic">Topic</label>
+                                                    <select class="form-control" id="topic" name="topic" required>
+                                                        <option value="">---------</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="custom-file mb-3">
+                                                        <input type="file" name="file" class="custom-file-input" id="validate_file" required>
+                                                        <label class="custom-file-label" for="validate_file">Choose file...</label>
+                                                        <small id="emailHelp" class="form-text text-muted">
+                                                            Note*: Don't include ,(comas) in the fields. Use 0 (for Non-ATL) and 1 (for ATL). Check the data twice before uploading the file.</small>
+                                                    </div>
+                                                    <button type="submit" name="file_upload_que" class="btn btn-primary my-4">Upload</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if messages %}
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                    {% if 'error_loading_file' in message.tags %}
+                                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                            {% endif %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+
+$("#id_standard").change(function () {
+      var url = $("#studentform").attr("data-sub-url");
+      standardId = $(this).val();
+      packageId = $("#id_package").val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'package': packageId,
+          'standard': standardId
+        },
+        success: function (data) {
+          $("#id_sub_name").html(data);
+        }
+      });
+
+    });
+
+$("#id_sub_name").change(function () {
+      var url = $("#studentform").attr("data-topic-url");
+      subjectId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'sub_name': subjectId,
+          'package': packageId,
+          'standard': standardId
+        },
+        success: function (data) {
+          $("#id_topic").html(data);
+        }
+      });
+
+    });
+
+$("#atl_que").change(function () {
+    var url1 = $("#studentform").attr("data-atl-url");
+    var url2 = $("#studentform").attr("data-atlque-url");
+    atl = $(this).is(":checked");
+
+    $.ajax({
+        url: url1,
+        data: {
+            'atl': atl
+        },
+        success: function (data) {
+            $("#id_package").html(data);
+        }
+    });
+
+    $.ajax({
+        url: url2,
+        data: {
+            'atl': atl
+        },
+        success: function (data) {
+            $("#id_question_tags").html(data);
+        }
+    });
+});
+
+$("#standard").change(function () {
+    var url = $("#studentform").attr("data-sub-url");
+    var stdId = $(this).val();
+    var packId = $("#package").val();
+
+    $.ajax({
+        url: url,
+        data: {
+          'package': packId,
+          'standard': stdId
+        },
+        success: function (data) {
+          $("#sub_name").html(data);
+        }
+      });
+
+    });
+
+$("#sub_name").change(function () {
+    var url = $("#studentform").attr("data-topic-url");
+    var subId = $(this).val();
+    var stdId = $("#standard").val();
+    var packId = $("#package").val();
+
+    $.ajax({
+        url: url,
+        data: {
+          'sub_name': subId,
+          'package': packId,
+          'standard': stdId
+        },
+        success: function (data) {
+          $("#topic").html(data);
+        }
+      });
+
+    });
+
+
+$("#id_question_tags").change(function () {
+    var question_tags = $(this).val();
+
+    if (question_tags == 'Passage Based') {
+        $("#options").children().remove();
+    } else {
+        $("#options").load(location.href+" #options>");
+    }
+
+    });
+
+</script>
+
+{% endblock %}

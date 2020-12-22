@@ -1,0 +1,8 @@
+{% for q in questions %}
+<tr>
+    <td>{{ q }}</td>
+    <td>{{ q.question_tags }}</td>
+    <td><input class="form-control form-control-sm" name="value{{q.id}}"></td>
+    <td><input type="checkbox" class="form-check-input position-static" aria-label="..." name="selected" value="{{q.id}}"></td>
+</tr>
+{% endfor %}
