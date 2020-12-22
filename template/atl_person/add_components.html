@@ -1,0 +1,42 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Add New Package Components</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form class="needs-validation" id="Tform" method="post"
+                           data-component-url="{% url 'ajax_load_component' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.package|as_crispy_field }}
+                                </div>
+                                <div class="col">
+                                    {{ form.component|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col text-right">
+                                <button type="submit" class="btn btn-primary my-4">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,239 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h1 class="mb-0">Vendor Registration Form</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-secondary">
+                    <form class="needs-validation" id="Tform" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <h3>Is order placed through GEM?</h3>
+                                    <div class="table-responsive">
+                                        <table class="table align-items-center table-flush">
+                                            <tbody>
+                                                <tr>
+                                                    <td><input type="radio" class="mb-0 form-check-input" value="True" name="order">
+                                                        <label class="form-check-label">Yes</label></td>
+                                                    <td>
+                                                        <input type="radio" class="mb-0 form-check-input" value="False" name="order">
+                                                        <label class="form-check-label">No</label>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        {{ form.gem_order_number|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    {{ form.purchase_order_no|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <span>Enrollment for which package</span>
+                                    <div class="table-responsive">
+                                        <table class="table align-items-center table-flush">
+                                            <tbody>
+                                                <tr>
+                                                    {% for p in package %}
+                                                        <td><input type="checkbox" class="mb-0 form-check-input" value={{p}} name="package">
+                                                            <label class="form-check-label">{{ p }}</label></td>
+                                                    {% endfor %}
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <h3>Company Details</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        {{ form.company_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form.company_inc_id|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        {{ form.address|as_crispy_field }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form.phone|as_crispy_field }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form.email|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <h3>Person Incharge Details</h3>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        {{ form.person_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form.person_phone|as_crispy_field }}
+                                    </div>
+                                    <div class="col">
+                                        {{ form.person_email|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#Modal">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade bd-example-modal-lg" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ModalLabel">Confirmation</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="form-group">
+                                                    <div class="table-responsive">
+                                                        <table class="table align-items-center table-flush">
+                                                            <thead class="thead-light">
+                                                                <tr>
+                                                                    <th scope="col">Ordered Through GEM?</th>
+                                                                    <th scope="col">GEM Order Number</th>
+                                                                    <th scope="col">Purchase Order Number</th>
+                                                                    <th scope="col">Package Enrolled</th>
+                                                                    <th scope="col">Company Name</th>
+                                                                    <th scope="col">Company Incorporation ID</th>
+                                                                    <th scope="col">Address</th>
+                                                                    <th scope="col">Contact Number</th>
+                                                                    <th scope="col">Email ID</th>
+                                                                    <th scope="col">Person Name</th>
+                                                                    <th scope="col">Person Number</th>
+                                                                    <th scope="col">Person Email</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td id="gem_order"></td>
+                                                                    <td id="gem_order_number"></td>
+                                                                    <td id="purchase_order_no"></td>
+                                                                    <td id="package"></td>
+                                                                    <td id="company_name"></td>
+                                                                    <td id="company_inc_id"></td>
+                                                                    <td id="address"></td>
+                                                                    <td id="phone"></td>
+                                                                    <td id="email"></td>
+                                                                    <td id="person_name"></td>
+                                                                    <td id="person_phone"></td>
+                                                                    <td id="person_email"></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" name="add_school_details" class="btn btn-primary my-4">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        {% if 'data_add_success' in message.tags %}
+                                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                        {% endif %}
+                                        {% if 'incorrect_format' in message.tags %}
+                                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+var selected = new Array();
+
+$('input[type=checkbox][name=package]').change(function() {
+    selected = [];
+    $("input:checkbox[name=package]:checked").each(function() {
+       selected.push($(this).val());
+    });
+});
+
+function checkData() {
+    $("#gem_order").html($("input[name=order]:checked").val());
+    $("#gem_order_number").html($("#id_gem_order_number").val());
+    $("#purchase_order_no").html($("#id_purchase_order_no").val());
+    $("#package").html(selected);
+    $("#company_name").html($("#id_company_name").val());
+    $("#company_inc_id").html($("#id_company_inc_id").val());
+    $("#address").html($("#id_address").val());
+    $("#email").html($("#id_email").val());
+    $("#person_name").html($("#id_person_name").val());
+    $("#person_email").html($("#id_person_email").val());
+    $("#person_phone").html($("#id_person_phone").val());
+    $("#phone").html($("#id_phone").val());
+
+    };
+
+</script>
+{% endblock %}

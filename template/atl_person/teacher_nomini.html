@@ -1,0 +1,134 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" href="{% url 'atl_school_details' %}" aria-selected="true">
+                                    <i class="ni ni-cloud-upload-96 mr-2"></i>School Details For ATL Incharge</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" href="{% url 'atl_incharge_info' %}" aria-selected="true">
+                                    <i class="ni ni-cloud-upload-96 mr-2"></i>School ATL Incharge Information</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" href="{% url 'atl_status' %}" aria-selected="false">
+                                    <i class="ni ni-calendar-grid-58 mr-2"></i>ATL Establishment Status</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-3-tab" href="{% url 'teacher_nomini' %}" aria-selected="false">
+                                    <i class="ni ni-bell-55 mr-2"></i>Teacher Nomination Details</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <h1>Teacher Nomination Details</h1>
+                                <div class="p-4 bg-secondary">
+                                    <form  method="post" class="needs-validation" id="atlpform"
+                                           data-package-url="{% url 'ajax_load_package' %}">
+                                    {% csrf_token %}
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    {{ form.name|as_crispy_field }}
+                                                </div>
+                                                <div class="col">
+                                                    {{ form.phone|as_crispy_field }}
+                                                </div>
+                                                <div class="col">
+                                                    {{ form.email|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#Modal">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade bd-example-modal-lg" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="ModalLabel">Confirmation</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="container-fluid">
+                                                            <div class="form-group">
+                                                                <div class="table-responsive">
+                                                                    <table class="table align-items-center table-flush">
+                                                                        <thead class="thead-light">
+                                                                            <tr>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">Contact Number</th>
+                                                                                <th scope="col">Email ID</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td id="name"></td>
+                                                                                <td id="phone"></td>
+                                                                                <td id="email"></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" name="add_school_details" class="btn btn-primary my-4">Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if messages %}
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                    {% if 'data_add_success' in message.tags %}
+                                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                                    {% endif %}
+                                                    {% if 'incorrect_format' in message.tags %}
+                                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+function checkData() {
+    $("#name").html($("#id_name").val());
+    $("#phone").html($("#id_phone").val());
+    $("#email").html($("#id_email").val());
+
+};
+</script>
+{% endblock %}

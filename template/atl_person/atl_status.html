@@ -1,0 +1,289 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" href="{% url 'atl_school_details' %}" aria-selected="true">
+                                    <i class="ni ni-cloud-upload-96 mr-2"></i>School Details For ATL Incharge</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" href="{% url 'atl_incharge_info' %}" aria-selected="true">
+                                    <i class="ni ni-cloud-upload-96 mr-2"></i>School ATL Incharge Information</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-4-tab" href="{% url 'atl_status' %}" aria-selected="false">
+                                    <i class="ni ni-calendar-grid-58 mr-2"></i>ATL Establishment Status</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" href="{% url 'teacher_nomini' %}" aria-selected="false">
+                                    <i class="ni ni-bell-55 mr-2"></i>Teacher Nomination Details</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <h1>ATL Establishment Status</h1>
+                                <div class="p-4 bg-secondary">
+                                    <form  method="post" class="needs-validation" id="atlpform"
+                                           data-package-url="{% url 'ajax_load_package' %}">
+                                    {% csrf_token %}
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h3>Has Applied for ATL Lab</h3>
+                                                    <div class="table-responsive">
+                                                        <table class="table align-items-center table-flush">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><input type="radio" class="mb-0 form-check-input" value="True" name="applied">
+                                                                        <label class="form-check-label">Yes</label></td>
+                                                                    <td>
+                                                                        <input type="radio" class="mb-0 form-check-input" value="False" name="applied">
+                                                                        <label class="form-check-label">No</label>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ form.date_applied|as_crispy_field }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h3>Who Registered?</h3>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ form.registered_by|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form.reg_p_phone|as_crispy_field }}
+                                                    </div>
+                                                    <div class="col">
+                                                        {{ form.reg_p_email|as_crispy_field }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h3>Has ATL got selected or qualified</h3>
+                                                    <div class="table-responsive">
+                                                        <table class="table align-items-center table-flush">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><input type="radio" class="mb-0 form-check-input" value="True" name="qualified">
+                                                                        <label class="form-check-label">Yes</label></td>
+                                                                    <td>
+                                                                        <input type="radio" class="mb-0 form-check-input" value="False" name="qualified">
+                                                                        <label class="form-check-label">No</label>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ form.date_qualified|as_crispy_field }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h3>Has ATL Fund Received</h3>
+                                                    <div class="table-responsive">
+                                                        <table class="table align-items-center table-flush">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><input type="radio" class="mb-0 form-check-input" value="True" name="fund_received">
+                                                                        <label class="form-check-label">Yes</label></td>
+                                                                    <td>
+                                                                        <input type="radio" class="mb-0 form-check-input" value="False" name="fund_received">
+                                                                        <label class="form-check-label">No</label>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        {{ form.fund_on|as_crispy_field }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="button" onclick="checkData()" class="btn btn-primary" data-toggle="modal" data-target="#Modal">Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade bd-example-modal-lg" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="ModalLabel">Confirmation</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="container-fluid">
+                                                            <div class="form-group">
+                                                                <div class="table-responsive">
+                                                                    <table class="table align-items-center table-flush">
+                                                                        <thead class="thead-light">
+                                                                            <tr>
+                                                                                <th scope="col">Applied for ATL?</th>
+                                                                                <th scope="col">Date Applied</th>
+                                                                                <th scope="col">Registered By</th>
+                                                                                <th scope="col">Registered Person Contact</th>
+                                                                                <th scope="col">Registered Person Email</th>
+                                                                                <th scope="col">Qualified for ATL?</th>
+                                                                                <th scope="col">Date Qualified</th>
+                                                                                <th scope="col">ATL Fund Received?</th>
+                                                                                <th scope="col">Received On</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td id="applied"></td>
+                                                                                <td id="date_applied"></td>
+                                                                                <td id="registered_by"></td>
+                                                                                <td id="reg_p_phone"></td>
+                                                                                <td id="reg_p_email"></td>
+                                                                                <td id="atl_qualified"></td>
+                                                                                <td id="date_qualified"></td>
+                                                                                <td id="fund_received"></td>
+                                                                                <td id="fund_on"></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" name="add_school_details" class="btn btn-primary my-4">Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if messages %}
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                    {% if 'data_add_success' in message.tags %}
+                                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                                    {% endif %}
+                                                    {% if 'incorrect_format' in message.tags %}
+                                                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+$('input[type=radio][name=applied]').change(function() {
+    if (this.value == "False") {
+        $("#id_date_applied").prop("disabled", true);
+        } else {
+        $("#id_date_applied").prop("disabled", false);
+        };
+
+});
+
+$('input[type=radio][name=qualified]').change(function() {
+    if (this.value == "False") {
+        $("#id_date_qualified").prop("disabled", true);
+        } else {
+        $("#id_date_qualified").prop("disabled", false);
+        };
+
+});
+
+$('input[type=radio][name=fund_received]').change(function() {
+    if (this.value == "False") {
+        $("#id_fund_on").prop("disabled", true);
+        } else {
+        $("#id_fund_on").prop("disabled", false);
+        };
+
+});
+
+function checkData() {
+    $("#applied").html($("input[name=applied]:checked").val());
+    $("#date_applied").html($("#id_date_applied").val());
+    $("#registered_by").html($("#id_registered_by").val());
+    $("#reg_p_phone").html($("#id_reg_p_phone").val());
+    $("#reg_p_email").html($("#id_reg_p_email").val());
+    $("#atl_qualified").html($("input[name=qualified]:checked").val());
+    $("#date_qualified").html($("#id_date_qualified").val());
+    $("#fund_received").html($("input[name=fund_received]:checked").val());
+    $("#fund_on").html($("#id_fund_on").val());
+
+    };
+
+
+
+</script>
+
+{% endblock %}
