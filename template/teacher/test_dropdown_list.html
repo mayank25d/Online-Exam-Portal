@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for t in tests %}
+<option value="{{ t.test_paper.id }}">{{ t.test_paper }}</option>
+{% endfor %}

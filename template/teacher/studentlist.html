@@ -1,0 +1,17 @@
+<thead class="thead-light">
+    <tr>
+        <th scope="col">Student</th>
+        <th scope="col">Marks</th>
+        <th scope="col"></th>
+    </tr>
+</thead>
+<tbody>
+    {% for key, values in m_sheet.items %}
+    <tr>
+        <td scope="row">{{ key.first_name }}</td>
+        <td scope="row">{{ values.0.marks__sum }}</td>
+        <td scope="row>"><a role="button" href="{% url 'answer_sheet' test_id=values.1 student_id=key.id  %}"
+                            class="btn btn-primary">Answer Sheet</a></td>
+    </tr>
+    {% endfor %}
+</tbody>

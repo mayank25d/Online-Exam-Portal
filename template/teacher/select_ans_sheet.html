@@ -1,0 +1,105 @@
+{% extends './base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="tabs-icons-text-1" aria-labelledby="tabs-icons-text-1-tab">
+                                <div class="p-4 bg-secondary">
+                                    <form method="post" class="needs-validation" id="studentform"
+                                          data-test-url="{% url 'ajax_load_test' %}" data-studentlist-url="{% url 'ajax_load_studentlist' %}">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="class">Class</label>
+                                                <select class="form-control" id="class">
+                                                    <option value="">---------</option>
+                                                    {% for s in standard %}
+                                                        <option value="{{ s }}">{{ s }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <label for="test">Test</label>
+                                                <select class="form-control" id="test">
+                                                    <option value="">---------</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Student Submits</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+<!--                     Projects table -->
+                    <table class="table align-items-center table-flush" id="studentlist">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Student</th>
+                            <th scope="col">Marks</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td scope="row"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $('#class').change(function () {
+      var url = $("#studentform").attr("data-test-url");
+      standard = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'standard': standard
+        },
+        success: function (data) {
+          $("#test").html(data);
+        }
+      });
+
+    });
+
+    $('#test').change(function () {
+        var url = $("#studentform").attr("data-studentlist-url");
+        test = $(this).val();
+
+        $.ajax({
+            url: url,
+            data: {
+            'test': test
+            },
+            success: function (data) {
+            $("#studentlist").html(data);
+            }
+            });
+        });
+</script>
+
+{% endblock %}
